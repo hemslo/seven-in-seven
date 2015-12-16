@@ -10,7 +10,7 @@ count_array([_|Tail], Count) -> count_array(Tail, Count + 1).
 count_to_ten() -> counting(1).
 counting(10) -> 10;
 counting(Count) ->
-  io:format("~.10B~n", [Count]),
+  io:format("~p~n", [Count]),
   counting(Count + 1).
 
 % Write a function that uses matching to selectively print “success” or “error: message” given input of the form {error, Message} or success.
