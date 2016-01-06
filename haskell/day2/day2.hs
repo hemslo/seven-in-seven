@@ -32,5 +32,37 @@ module Main where
   sieve (p:xs) = p : sieve [x | x <- xs, x `mod` p > 0]
 
 -- • Break a long string into individual lines at proper word boundaries.
+  wordwrap :: Int -> String -> String
+  wordwrap maxlen s = wrap 0 (words s) where
+    wrap _ [] = "\n"
+    wrap pos (w:ws)
+      | pos == 0 = w ++ wrap (pos + lw) ws
+      | pos + lw + 1 > maxlen = '\n':wrap 0 (w:ws)
+      | otherwise = " " ++ w ++ wrap (pos + lw + 1) ws
+      where lw = length w
+
 -- • Add line numbers to the previous exercise.
+  addln :: String -> String
+  addln s = unlines (map (\(n, line) -> (show n) ++ " " ++ line) (zip [1..] (lines s)))
+
 -- • To the above exercise, add functions to left, right, and fully justify the text with spaces (making both margins straight).
+  spaces :: Int -> String
+  spaces n = take n (repeat ' ')
+
+  left :: String -> String
+  left s = do
+    let alllines = lines s
+    let maxlen = maximum (map (\n -> length n) alllines)
+    unlines (map (\n -> n ++ (spaces (maxlen - length n))) alllines)
+
+  right :: String -> String
+  right s = do
+    let alllines = lines s
+    let maxlen = maximum (map (\n -> length n) alllines)
+    unlines (map (\n -> (spaces (maxlen - length n)) ++ n) alllines)
+
+  justify :: String -> String
+  justify s = do
+    let alllines = lines s
+    let maxlen = maximum (map (\n -> length n) alllines)
+    unlines (map (\n -> (spaces (quot (maxlen - length n) 2)) ++ n ++ (spaces (quot (maxlen - length n) 2))) alllines)
