@@ -5,3 +5,9 @@ CMakeScripts
 Makefile
 cmake_install.cmake
 install_manifest.txt
+
+# elm-package generated files
+elm-package.json
+elm-stuff/
+# elm-repl generated files
+repl-temp-*
