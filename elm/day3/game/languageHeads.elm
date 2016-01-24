@@ -21,7 +21,7 @@ type alias Head = { x:Float, y:Float, vx:Float, vy:Float, img:String }
 type alias Player = { x:Float, score:Int }
 type alias Game = { state:State, heads: List Head, player:Player, seed: Seed }
 
-defaultHead n = {x=100.0, y=75, vx=60, vy=0.0, img=headImage n }   -- (2)
+defaultHead n = {x=100.0, y=75, vx=50, vy=0.0, img=headImage n }   -- (2)
 
 defaultGame = { state   = Pause,
                 heads   = [],
@@ -178,5 +178,8 @@ drawMessage w h state =    -- (20)
   |> move (50, 50)
 
 stateMessage state =
-  if state == GameOver then "Game Over" else "Language Head"
+  case state of
+    GameOver -> "Game Over"
+    Pause -> "Press spacebar to start"
+    _ -> "Language Head"
 -- END:part5
