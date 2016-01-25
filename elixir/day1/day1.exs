@@ -31,4 +31,20 @@ defmodule Day1 do
   def word_count(atoms) do
     Enum.reduce(atoms, [], &(Keyword.put(&2, &1, 1 + Keyword.get(&2, &1, 0))))
   end
+
+#  Represent a tree of sentences as tuples. Traverse the tree, presenting an indented list. For example, traverse({"See Spot.", {"See Spot sit.", "See Spot run."}}) would return:
+# See Spot.
+#   See Spot sit.
+#   See Spot run.
+  def traverse(tree) do
+    _traverse(Tuple.to_list(tree), 0)
+  end
+
+  def _traverse(tree=[_|_], level) do
+    Enum.each(tree, &(_traverse((if is_tuple(&1), do: Tuple.to_list(&1), else: &1), level + 1)))
+  end
+
+  def _traverse(node, level) do
+    IO.puts "#{String.duplicate(" ", level * 2 - 2)}#{node}"
+  end
 end
