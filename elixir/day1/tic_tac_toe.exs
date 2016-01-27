@@ -58,13 +58,21 @@ defmodule TicTacToe do
     Enum.map next_moves(board), &(next_board(board, &1))
   end
 
-  def minimax(board, player, maximizing) do
+  def minimax(board, player, depth) do
     state = state(board)
     if state != :incomplete do
-      value(state, player)
+      value(state, player) / depth
     else
-      values = Enum.map(next_boards(board), &(minimax(&1, player, !maximizing)))
-      if maximizing, do: Enum.max(values), else: Enum.min(values)
+      values = Enum.map(next_boards(board), &(minimax(&1, player, depth + 1)))
+      if player == current_player(board), do: Enum.max(values), else: Enum.min(values)
     end
   end
+
+  def best_move(board) do
+    Enum.max_by next_moves(board),
+                &(minimax(next_board(board, &1), current_player(board), 1))
+  end
 end
+
+# TicTacToe.best_move(["O", "_", "X", "X", "_", "_", "X", "O", "O"]) == 4
+# TicTacToe.best_move(["_", "X", "_", "_", "_", "X", "O", "O", "X"]) == 2
