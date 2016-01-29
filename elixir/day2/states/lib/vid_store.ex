@@ -24,6 +24,10 @@ defmodule VidStore do
 
   def finding(video), do: log( video, "Finding #{video.title}" )
 
+  def before_rent(video), do: log( video, "Before renting #{video.title}" )
+
+  def after_rent(video), do: log( video, "After renting #{video.title}" )
+
   def log(video, message) do
     %{video | log: [message|video.log]}
   end

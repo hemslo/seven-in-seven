@@ -26,20 +26,30 @@ defmodule StateMachine do
         unquote(states)
       end
 
-      unquote event_callbacks(events)
+      unquote event_callbacks(events, env.module)
     end
   end
 
-  def event_callback(name) do
-    callback = name
+  def event_callback(name, module) do
     quote do
       def unquote(name)(context) do
-        StateMachine.Behavior.fire(state_machine, context, unquote(callback))
+        context = perform_callback(context, unquote(module), "before_#{unquote(name)}")
+        context = StateMachine.Behavior.fire(state_machine, context, unquote(name))
+        perform_callback(context, unquote(module), "after_#{unquote(name)}")
       end
     end
   end
 
-  def event_callbacks(names) do
-    Enum.map names, &event_callback/1
+  def perform_callback(context, module, callback) do
+    func = String.to_atom(callback)
+    if function_exported?(module, func, 1) do
+      apply(module, func, [context])
+    else
+      context
+    end
+  end
+
+  def event_callbacks(names, module) do
+    Enum.map names, &(event_callback(&1, module))
   end
 end
