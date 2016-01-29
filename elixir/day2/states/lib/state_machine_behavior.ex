@@ -1,11 +1,11 @@
 defmodule StateMachine.Behavior do
   def fire(context, event) do
-    %{context | state: event[:to]}
+    StateMachineProtocol.update_state(context, event[:to])
     |> activate(event)
   end
 
   def fire(states, context, event_name) do
-    event = states[context.state][event_name]
+    event = states[StateMachineProtocol.state(context)][event_name]
     fire(context, event)
   end
 
