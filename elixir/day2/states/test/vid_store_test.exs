@@ -1,6 +1,6 @@
 defmodule VidStoreTest do
-  import Should
   use ExUnit.Case
+  import Should
 
   should "update count" do
     rented_video = VidStore.renting(video)
@@ -9,7 +9,6 @@ defmodule VidStoreTest do
 
   should "rent video" do
     rented_video = VidStore.rent video
-
     assert :rented == rented_video.state
     assert 1 == Enum.count( rented_video.log )
   end
@@ -17,7 +16,6 @@ defmodule VidStoreTest do
   should "handle multiple transitions" do
     import VidStore
     vid = video |> rent |> return |> rent |> return |> rent
-
     assert 5 == Enum.count( vid.log )
     assert 3 == vid.times_rented
   end
