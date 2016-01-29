@@ -2,14 +2,16 @@ defmodule VidStore do
   use StateMachine
 
   state :available,
-     rent: [ to: :rented,      calls: [ &VidStore.renting/1 ]]
+    rent: [ to: :rented,      calls: [ &VidStore.renting/1 ]]
 
   state :rented,
-     return: [ to: :available, calls: [ &VidStore.returning/1 ]],
-     lose:   [ to: :lost,      calls: [ &VidStore.losing/1 ]]
+    return: [ to: :available, calls: [ &VidStore.returning/1 ]],
+    lose:   [ to: :lost,      calls: [ &VidStore.losing/1 ]]
 
-  state :lost, []
+  state :lost,
+    find: [ to: :found,       calls: [ &VidStore.finding/1]]
 
+  state :found, []
 
   def renting(video) do
     rented_video = log video, "Renting #{video.title}"
@@ -19,6 +21,8 @@ defmodule VidStore do
   def returning(video), do: log( video, "Returning #{video.title}" )
 
   def losing(video), do: log( video, "Losing #{video.title}" )
+
+  def finding(video), do: log( video, "Finding #{video.title}" )
 
   def log(video, message) do
     %{video | log: [message|video.log]}

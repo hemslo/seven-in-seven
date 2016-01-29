@@ -22,5 +22,11 @@ defmodule VidStoreTest do
     assert 3 == vid.times_rented
   end
 
+  should "find video" do
+    import VidStore
+    vid = video |> rent |> lose |> find
+    assert :found == vid.state
+  end
+
   def video, do: %Video{title: "XMen"}
 end
