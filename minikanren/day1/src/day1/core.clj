@@ -78,3 +78,14 @@
     (fresh [p y]
       (turingo p y)
       (== q [p y]))))
+
+; Write a relation called extendo, which works like the built-in appendo, mentioned in the easy problems.
+(defn extendo [x y z]
+  (conde
+    [(== x ()) (== y z)]
+    [(fresh [a d r]
+      (conso a d x)
+      (conso a r z)
+      (extendo d y r)
+      )]
+    ))
